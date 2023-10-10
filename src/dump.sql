@@ -16,7 +16,7 @@ create table categorias (
 
                             --Inserindo as categorias--
 insert into categorias (descricao) values 
-  ('Informática')
+  ('Informática'),
   ('Celulares'),
   ('Beleza e Perfumaria'),
   ('Mercado'),
