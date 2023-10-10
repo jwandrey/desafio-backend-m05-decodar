@@ -47,8 +47,22 @@ const editarUsuario = async (req, res) => {
   }
 };
 
+
+const listarCategorias = async (req, res) => {
+  try {
+    const categorias = await knex("categorias").select("descricao")
+		return res.json(categorias)
+    
+  } catch (error) {
+    console.error(message.error);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
+};
+
 module.exports = {
   cadastrarUsuario,
   detalharUsuario,
   editarUsuario,
+  listarCategorias,
 };
+
