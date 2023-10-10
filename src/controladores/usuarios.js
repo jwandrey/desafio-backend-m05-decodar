@@ -7,18 +7,18 @@ const cadastrarUsuario = async (req, res) => {
 
   if (!nome || !email || !senha) {
     return res
-      .satus(400)
+      .status(400)
       .json({ mensagem: "Todos os campos são obrigatórios!" });
   }
 
   try {
-    const emailValido = await knex("usuarios").where("email", email).first();
+     const emailExistente = await knex("usuarios").where("email", email).first();
 
-    if (!emailValido) {
-      return res.status(400).json("O email já existe.");
+     if (emailExistente) {
+       return res.status(400).json({ mensagem: "O email já existe." });
     }
 
-    const senhaCriptografada = await bcrypt.hash(senha, 10);
+    const senhaCriptografada = await criptografarSenha(senha)
 
     const usuario = await knex("usuarios")
       .insert({ nome, email, senha: senhaCriptografada })
