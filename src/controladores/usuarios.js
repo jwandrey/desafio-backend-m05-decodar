@@ -32,8 +32,18 @@ const editarUsuario = async (req, res) => {
 	}
 }
 
+const teste = async( req, res) => {
+	try{
+		const usuarios = await knex('categorias')
+		return res.json(usuarios)
+	}catch (error) {
+		return res.status(500).json({mensagem: 'Erro do servidor'})
+	}
+}
+
 module.exports = {
     cadastrarUsuario,
     detalharUsuario,
-    editarUsuario
+    editarUsuario, 
+	teste
 }
