@@ -7,9 +7,6 @@ const login = require('./controladores/login');
 
 const rotas = express();
 
-rotas.get('/', teste)
-
-/*
 rotas.get('/categoria', listarCategorias); 
 rotas.post('/usuario', cadastrarUsuario); 
 rotas.post('/login', login); 
@@ -18,5 +15,5 @@ rotas.use(validarLogin);
 
 rotas.get('/usuario', detalharUsuario); 
 rotas.put('/usuario', editarUsuario); 
-*/
+
 module.exports = rotas;

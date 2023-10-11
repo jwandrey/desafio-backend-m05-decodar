@@ -41,6 +41,7 @@ const detalharUsuario = async (req, res) => {
 
 const editarUsuario = async (req, res) => {
   try {
+	
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
