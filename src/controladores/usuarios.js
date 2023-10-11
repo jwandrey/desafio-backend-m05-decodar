@@ -31,42 +31,41 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-
 const editarUsuario = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
-
-
-const listarCategorias = async (req, res) => {
-  try {
-    const categoriasListadas = await knex("categorias").select("descricao")
-		return res.json(categoriasListadas )
-
-  } catch (error) {
-    console.error(message.error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
-};
-
 
 const detalharUsuario = async (req, res) => {
-  try {
-    return res.status(200).json(req.usuario)
-  } catch (error) {
-    console.error(message.error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
+	const idToken = req.usuario.id;
+
+	try {
+		const usuario = await knex('usuarios').where('id', idToken)
+
+		if (!usuario) {
+			return res.status(404).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
+		}
+
+		const usuarioAutenticado = {
+			id: idToken,
+			nome: req.usuario.nome,
+			email: req.usuario.email
+		}
+
+		return res.json(usuarioAutenticado);
+	} catch (error) {
+      console.error(error);
+		return res.status(500).json({ mensagem: "Erro interno do servidor." });
+	}
 };
 
 
 module.exports = {
   cadastrarUsuario,
   detalharUsuario,
-  editarUsuario,
-  listarCategorias,
+  editarUsuario
 };
 
