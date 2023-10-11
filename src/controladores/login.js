@@ -1,6 +1,6 @@
 const knex = require('../conexao');
 const jwt = require('jsonwebtoken');
-const { verificarPreenchimento } = require('../utils/verificacoes');
+const { verificaEmailSenha } = require('../utils/verificacoes');
 const { validarSenha } = require('../utils/criptografia');
 
 const login = async (req, res) => {
@@ -21,18 +21,16 @@ const login = async (req, res) => {
             return res.status(400).json({ mensagem: 'Senha inválida' })
         }
 
-        const token = jwt.sign({ id: usuario.id }, senhaJwt, { expiresIn: '8h' })
+        const token = jwt.sign({ id: usuario.id }, process.env.SENHAJWT, { expiresIn: '8h' })
+
         return res.json({
             usuario,
             token
-        })
-
+        });
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ mensagem: "Erro interno do servidor" });
     }
 }
 
-module.exports = {
-    login
-}
+module.exports = login;
