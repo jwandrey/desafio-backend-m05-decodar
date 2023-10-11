@@ -1,12 +1,12 @@
 const knex = require('../conexao');
 const jwt = require('jsonwebtoken');
-const { verificarPreenchimento } = require('../utils/verificacoes');
+const { verificarPreenchimento, verificaEmailSenha } = require('../utils/verificacoes');
 const { validarSenha } = require('../utils/criptografia');
 
 const login = async (req, res) => {
     const { email, senha } = req.body
     verificaEmailSenha(email, senha, res);
-
+    
     try {
         const emailExistente = await knex("usuarios").where("email", email).first();
 
@@ -33,6 +33,4 @@ const login = async (req, res) => {
     }
 }
 
-module.exports = {
-    login
-}
+module.exports = login;
