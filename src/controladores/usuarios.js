@@ -31,13 +31,6 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-const detalharUsuario = async (req, res) => {
-  try {
-  } catch (error) {
-    console.error(message.error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
-};
 
 const editarUsuario = async (req, res) => {
   try {
@@ -47,8 +40,33 @@ const editarUsuario = async (req, res) => {
   }
 };
 
+
+const listarCategorias = async (req, res) => {
+  try {
+    const categoriasListadas = await knex("categorias").select("descricao")
+		return res.json(categoriasListadas )
+
+  } catch (error) {
+    console.error(message.error);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
+};
+
+
+const detalharUsuario = async (req, res) => {
+  try {
+    return res.status(200).json(req.usuario)
+  } catch (error) {
+    console.error(message.error);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
+};
+
+
 module.exports = {
   cadastrarUsuario,
   detalharUsuario,
   editarUsuario,
+  listarCategorias,
 };
+
