@@ -13,17 +13,17 @@ const validarLogin = async (req, res, next) => {
 	try {
 		const { id } = jwt.verify(token, process.env.SENHAJWT);
 
-		// const usuarioExistente = await knex('usuarios')
-		// 	.where({ id }) 
-        //  .first()
+		const usuarioExistente = await knex('usuarios')
+			.where({ id })
+        	.first()
 
-		// if (!usuarioExistente) {
-		// 	return res.status(401).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
-		// }
+		if (!usuarioExistente) {
+			return res.status(401).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
+		}
 
-		// req.usuario = usuarioExistente;
+		req.usuario = usuarioExistente;
 
-		// next();
+		next();
 	} catch (error) {
 		return res.status(401).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
 	}

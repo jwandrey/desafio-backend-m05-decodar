@@ -7,18 +7,18 @@ const cadastrarUsuario = async (req, res) => {
 
   if (!nome || !email || !senha) {
     return res
-      .satus(400)
+      .status(400)
       .json({ mensagem: "Todos os campos são obrigatórios!" });
   }
 
   try {
-    const emailValido = await knex("usuarios").where("email", email).first();
+     const emailExistente = await knex("usuarios").where("email", email).first();
 
-    if (!emailValido) {
-      return res.status(400).json("O email já existe.");
+     if (emailExistente) {
+       return res.status(400).json({ mensagem: "O email já existe." });
     }
 
-    const senhaCriptografada = await bcrypt.hash(senha, 10);
+    const senhaCriptografada = await criptografarSenha(senha)
 
     const usuario = await knex("usuarios")
       .insert({ nome, email, senha: senhaCriptografada })
@@ -31,24 +31,41 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-const detalharUsuario = async (req, res) => {
-  try {
-  } catch (error) {
-    console.error(message.error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
-};
-
 const editarUsuario = async (req, res) => {
   try {
   } catch (error) {
     console.error(error.message);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
+
+const detalharUsuario = async (req, res) => {
+	const idToken = req.usuario.id;
+
+	try {
+		const usuario = await knex('usuarios').where('id', idToken)
+
+		if (!usuario) {
+			return res.status(404).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
+		}
+
+		const usuarioAutenticado = {
+			id: idToken,
+			nome: req.usuario.nome,
+			email: req.usuario.email
+		}
+
+		return res.json(usuarioAutenticado);
+	} catch (error) {
+      console.error(error);
+		return res.status(500).json({ mensagem: "Erro interno do servidor." });
+	}
+};
+
 
 module.exports = {
   cadastrarUsuario,
   detalharUsuario,
-  editarUsuario,
+  editarUsuario
 };
+
