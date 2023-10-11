@@ -31,26 +31,56 @@ const cadastrarUsuario = async (req, res) => {
   }
 };
 
-const detalharUsuario = async (req, res) => {
-  try {
-  } catch (error) {
-    console.error(message.error);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
-  }
-};
-
 const editarUsuario = async (req, res) => {
+  const id = req.usuario.id;
+  const { nome, senha, email } = req.body
+
   try {
-	
+    const senhaCriptografada = await criptografarSenha(senha)
+    
+    let verificarEmail = await knex("usuarios").select('email').where("id", id).first();
+    
+    
+    if(email == verificarEmail.email){
+      await knex("usuarios").update({nome, senha: senhaCriptografada}).where('id', id);
+      res.status(201).json();
+    }
+    
+    await knex('usuarios').update({ nome, email, senha: senhaCriptografada }).where('id', id);
+    res.status(201).json();
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
+const detalharUsuario = async (req, res) => {
+	const idToken = req.usuario.id;
+
+	try {
+		const usuario = await knex('usuarios').where('id', idToken)
+
+		if (!usuario) {
+			return res.status(404).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
+		}
+
+		const usuarioAutenticado = {
+			id: idToken,
+			nome: req.usuario.nome,
+			email: req.usuario.email
+		}
+
+		return res.json(usuarioAutenticado);
+	} catch (error) {
+      console.error(error);
+		return res.status(500).json({ mensagem: "Erro interno do servidor." });
+	}
+};
+
 
 module.exports = {
   cadastrarUsuario,
   detalharUsuario,
-  editarUsuario,
+  editarUsuario
 };
+
