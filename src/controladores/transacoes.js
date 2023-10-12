@@ -7,7 +7,7 @@ const listarCategorias = async (req, res) => {
       return res.json(categoriasListadas)
   
     } catch (error) {
-      console.error(message.error);
+      console.error(error.message);
       return res.status(500).json({ mensagem: "Erro interno do servidor." });
     }
   };
