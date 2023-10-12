@@ -6,14 +6,13 @@ const { validarSenha } = require('../utils/criptografia');
 const login = async (req, res) => {
     const { email, senha } = req.body
     verificaEmailSenha(email, senha, res);
-
+    
     try {
         const emailExistente = await knex("usuarios").where("email", email).first();
 
         if (!emailExistente) {
             return res.status(400).json({ mensagem: 'Email e senha inválido' })
         }
-
         const { senha: senhaUsuario, ...usuario } = emailExistente;
         const senhaCorreta = await validarSenha(senha, senhaUsuario)
 
