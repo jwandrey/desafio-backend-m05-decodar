@@ -4,8 +4,8 @@
   "description": "![decordar banner](img/decodar-readme.png)",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./src/index.js",
-    "dev": "nodemon ./src/index.js"
+    "dev": "nodemon ./src/index.js",
+    "start": "nodemon ./src/index.js"
   },
   "keywords": [],
   "author": "",
