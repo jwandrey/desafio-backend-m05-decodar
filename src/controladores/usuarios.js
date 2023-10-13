@@ -1,5 +1,4 @@
 const knex = require("../conexao");
-const { verificarPreenchimento } = require("../utils/verificacoes");
 const { criptografarSenha } = require("../utils/criptografia");
 
 const cadastrarUsuario = async (req, res) => {
@@ -39,7 +38,6 @@ const editarUsuario = async (req, res) => {
     const senhaCriptografada = await criptografarSenha(senha)
     
     let verificarEmail = await knex("usuarios").select('email').where("id", id).first();
-    
     
     if(email == verificarEmail.email){
       await knex("usuarios").update({nome, senha: senhaCriptografada}).where('id', id);

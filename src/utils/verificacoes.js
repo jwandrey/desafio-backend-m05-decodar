@@ -1,7 +1,3 @@
-const verificarPreenchimento = (item) => {
-    return !item;
-}
-
 const verificaEmailSenha = (email, senha, res) => {
     if (!email) {
         return res.status(400).json({ mensagem: 'O campo email é obrigatório!' })
@@ -11,12 +7,6 @@ const verificaEmailSenha = (email, senha, res) => {
     }
 }
 
-const validarId = (id) => {
-    return isNaN(id);
-}
-
 module.exports = {
-    verificarPreenchimento,
-    verificaEmailSenha,
-    validarId
+    verificaEmailSenha
 }

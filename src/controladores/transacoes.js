@@ -1,5 +1,4 @@
 const knex = require('../conexao');
-const { verificarPreenchimento, validarId } = require('../utils/verificacoes');
 
 const listarCategorias = async (req, res) => {
     try {
