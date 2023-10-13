@@ -1,7 +1,3 @@
-                            --Criação do banco de dados--
-create database pdv;
-
-                            --Criação das tabelas--
 create table usuarios (
   id serial primary key,
   nome text not null,
@@ -14,7 +10,6 @@ create table categorias (
   descricao text not null
  );
 
-                            --Inserindo as categorias--
 insert into categorias (descricao) values 
   ('Informática'),
   ('Celulares'),
@@ -25,4 +20,3 @@ insert into categorias (descricao) values
   ('Moda'),
   ('Bebê'),
   ('Games');
-
