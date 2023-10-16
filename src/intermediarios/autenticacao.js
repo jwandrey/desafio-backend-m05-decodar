@@ -13,7 +13,7 @@ const validarLogin = async (req, res, next) => {
 	try {
 		const { id } = jwt.verify(token, process.env.SENHAJWT);
 
-		const usuarioExistente = await knex('usuarios')
+		const usuarioExistente = await knex("usuarios")
 			.where({ id })
         	.first()
 
