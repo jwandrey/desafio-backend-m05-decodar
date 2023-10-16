@@ -33,15 +33,49 @@ npm install dotenv
 
 ## :handshake: Colaboradores
 <table>
-  <tr>
-   <td align="center">
+  <tr align="center">
+   <td>
       <a href="http://github.com/Geana-Almeida">
-        <img src="Avatar.png" width="100px;" alt="Foto da Geana Almeida no GitHub"/><br>
+        <img src="img/geana.png" width="100px;" alt="Foto da Geana Almeida"/><br>
         <sub>
-          <b>GeanaAlmeida</b>
+          <b>Geana Almeida</b>
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="http://github.com/Darllisouza">
+        <img src="img/darli.png" width="100px;" alt="Foto da darlliane"/><br>
+        <sub>
+          <b>darlliane</b>
+        </sub>
+      </a>
+    </td>
+    </td>
+    <td align="center">
+      <a href="http://github.com/jwandrey">
+        <img src="img/jess (2).png" width="100px;" alt="Foto da Jéssica"/><br>
+        <sub>
+          <b>Jéssica</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+        <a href="http://github.com/lettribeiros">
+          <img src="img/leticia (2).png" width="100px;" alt="Foto da Leticia"/><br>
+          <sub>
+            <b>Leticia</b>
+          </sub>
+        </a>
+      </td>
+    <td align="center">
+        <a href="http://github.com/luelencavalheiro">
+          <img src="img/leticia (2).png" width="100px;" alt="Foto da Luelen"/><br>
+          <sub>
+            <b>Luelen Cavalheiro</b>
+          </sub>
+        </a>
+      </td>
   </tr>
+   
 </table>
 
