@@ -2,19 +2,19 @@
 
 
 ## :memo: Descrição
-Este sistema é responsável por gerenciar dados do usuário para realizar o login e fazer alteração no mesmo, além de exibir as categorias que estão disponivel no sistema.
+Este sistema é responsável por gerenciar dados do usuário para efetuar cadastro, realizar o login, editar informações do cadastro, além de exibir as categorias disponíveis no sistema.
 
 ## :books: Funcionalidades
-* <b>Cadastro do usuário</b>: Irá realizar o cadastro do usuário contendo o nome, email e senha onde a senha será criptografada. Esses dados irão ser encaminhado para o banco de dados.
-* <b>Login de usuário</b>: Irá verificar se o email e a senha está de acordo com oque foi cadastrado no banco de dados e quando o usuário fizer o login será gerado um token de verificação para permiter que seja feito alteração no mesmo.
-* <b>Verificar os dados do usuário logado</b>: Verifica se o usuário esta logado através do token e se estiver, exibi os dados dele menos a senha.
-* <b>Alterar os dados do usuário logado</b>: Verifica se o usuário esta logado através do token e se estiver, permite alterar os dados verificando se o email é unico.
-* <b>Listar categorias</b>: Lista todas as catégorias que podem ser usadas no sistema.
+* <b>Cadastro do usuário</b>: Realiza o cadastro do usuário contendo o nome, email e senha (criptografada). Esses dados serão encaminhados para um banco de dados SQL.
+* <b>Login de usuário</b>: Verifica se o email e a senha estão de acordo com o que foi cadastrado no banco de dados e quando o usuário fizer o login será gerado um token de verificação para autenticar o acesso.
+* <b>Verificar os dados do usuário logado</b>: Verifica se o usuário esta logado através do token e se estiver, exibe os dados do cadastro.
+* <b>Alterar os dados do usuário logado</b>: Verifica se o usuário está logado através do token e se estiver, permite alterar os dados. O email deve ser único, retornando uma mensagem de erro, caso não seja.
+* <b>Listar categorias</b>: Lista todas as categorias que podem ser usadas no sistema.
 ## :wrench: Tecnologias utilizadas
 * Node.js, Express, pg, postgresql, nodemon, bcrypt, jsonwebtoken, knex, cors e dotenv.
 
 ## :rocket: Rodando o projeto
-Para rodar o repositório é necessário clonar o mesmo, dar o seguinte comando para iniciar o projeto:
+Para rodar localmente, clone o repositório, e instale as seguintes bibliotecas:
 ```
 npm install express,
 npm install -D nodemon,
@@ -26,9 +26,10 @@ npm install cors,
 npm install dotenv
 
 ```
+OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
 
 ## :soon: Implementação futura
-* Na segunda sprint haverão mais funcionalidades a serem desenvolvidas, em breve incluídas neste repositório
+* Na segunda sprint haverão mais funcionalidades, em breve incluídas neste repositório.
 
 ## :outbox_tray: Deploy
 * Fizemos o deploy da API com a ferramenta gratuita [Cyclic](https://www.cyclic.sh/), e a criação de banco de dados no [ElephantSQL](https://www.elephantsql.com/).
