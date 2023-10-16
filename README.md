@@ -28,8 +28,11 @@ npm install dotenv
 ```
 
 ## :soon: Implementação futura
-* O que será implementado na próxima sprint?
-*   [ ] Será inplementado a 2 sprint do projeto.
+* Na segunda sprint haverão mais funcionalidades a serem desenvolvidas, em breve incluídas neste repositório
+
+## :outbox_tray: Deploy
+* Fizemos o deploy da API com a ferramenta gratuita [Cyclic](https://www.cyclic.sh/), e a criação de banco de dados no [ElephantSQL](https://www.elephantsql.com/).
+* [Link do Deploy](https://doubtful-cyan-harp-seal.cyclic.app/)
 
 ## :handshake: Colaboradores
 <table>
