@@ -1,1 +1,1 @@
-![decordar banner](img/decodar-readme.png)
+![decodar banner](img/decodar-readme.png)
