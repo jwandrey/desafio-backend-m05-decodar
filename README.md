@@ -82,4 +82,3 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
   </tr>
    
 </table>
-
