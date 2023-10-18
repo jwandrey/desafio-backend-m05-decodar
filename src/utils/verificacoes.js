@@ -13,7 +13,12 @@ const verificaIdExistente = (id) => {
 
 }
 
+const verificaNumeroValido = (numero) => {
+    return isNaN(numero);
+}
+
 module.exports = {
     verificaEmailSenha,
-    verificaIdExistente
+    verificaIdExistente,
+    verificaNumeroValido
 }
