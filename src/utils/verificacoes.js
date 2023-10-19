@@ -1,3 +1,5 @@
+const knex = require('../conexao');
+
 const verificaEmailSenha = (email, senha, res) => {
     if (!email) {
         return res.status(400).json({ mensagem: "O campo email é obrigatório!" })
@@ -7,6 +9,16 @@ const verificaEmailSenha = (email, senha, res) => {
     }
 }
 
+const verificaIdExistente = (id) => {
+
+}
+
+const verificaNumeroValido = (numero) => {
+    return isNaN(numero);
+}
+
 module.exports = {
-    verificaEmailSenha
+    verificaEmailSenha,
+    verificaIdExistente,
+    verificaNumeroValido
 }
