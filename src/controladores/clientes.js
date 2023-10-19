@@ -8,7 +8,7 @@ const cadastrarCliente = async (req, res) => {
         
      } catch (error) {
        console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
+       return res.status(500).json({ mensagem: "Erro interno do servidor." });
      }
 }
 
@@ -19,7 +19,7 @@ const editarCliente = async (req, res) => {
         
      } catch (error) {
        console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
+       return res.status(500).json({ mensagem: "Erro interno do servidor." });
      }
 }
 
@@ -28,7 +28,7 @@ const listarClientes = async (req, res) => {
         
      } catch (error) {
        console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
+       return res.status(500).json({ mensagem: "Erro interno do servidor." });
      }
 }
 
@@ -37,7 +37,7 @@ const detalharClientePorId = async (req, res) => {
         
      } catch (error) {
        console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
+       return res.status(500).json({ mensagem: "Erro interno do servidor." });
      }
 }
 
