@@ -1,6 +1,5 @@
-const knex = require("../conexao");
-const { verificarPreenchimento } = require("../utils/verificacoes");
-const { criptografarSenha } = require("../utils/criptografia");
+const knex = require('../conexao');
+const { criptografarSenha } = require('../utils/criptografia');
 
 const cadastrarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
@@ -27,7 +26,7 @@ const cadastrarUsuario = async (req, res) => {
     return res.status(200).json(usuario);
   } catch (error) {
     console.error(error.message);
-    return res.status(400).json({ mensagem: "Erro interno do servidor." });
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
@@ -37,20 +36,18 @@ const editarUsuario = async (req, res) => {
 
   try {
     const senhaCriptografada = await criptografarSenha(senha)
-    
-    let verificarEmail = await knex("usuarios").select('email').where("id", id).first();
-    
-    
+
+    let verificarEmail = await knex("usuarios").select("email").where("id", id).first();
     if(email == verificarEmail.email){
-      await knex("usuarios").update({nome, senha: senhaCriptografada}).where('id', id);
+      await knex("usuarios").update({nome, senha: senhaCriptografada}).where("id", id);
       res.status(201).json();
     }
+
     
-    await knex('usuarios').update({ nome, email, senha: senhaCriptografada }).where('id', id);
+    await knex("usuarios").update({ nome, email, senha: senhaCriptografada }).where("id", id);
     res.status(201).json();
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+    return res.status(400).json({ mensagem: "O email informado está vinculado a outra conta." });
   }
 };
 
@@ -58,7 +55,7 @@ const detalharUsuario = async (req, res) => {
 	const idToken = req.usuario.id;
 
 	try {
-		const usuario = await knex('usuarios').where('id', idToken)
+		const usuario = await knex("usuarios").where("id", idToken)
 
 		if (!usuario) {
 			return res.status(404).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
