@@ -1,9 +1,8 @@
 const express = require('express');
 const validarLogin = require('./intermediarios/autenticacao');
-const { listarCategorias } = require('./controladores/transacoes');
 const { cadastrarUsuario, detalharUsuario, editarUsuario } = require('./controladores/usuarios');
 const login = require('./controladores/login');
-const { cadastrarProduto, editarProduto, listarProdutos, detalharProdutoPorId, excluirProduto } = require('./controladores/produtos');
+const { cadastrarProduto, editarProduto, listarProdutos, detalharProdutoPorId, excluirProduto, listarCategorias } = require('./controladores/produtos');
 const { cadastrarCliente, editarCliente, detalharClientePorId, listarClientes } = require('./controladores/clientes');
 
 const rotas = express();
