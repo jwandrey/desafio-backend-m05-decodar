@@ -61,9 +61,31 @@ const cadastrarProduto = async (req, res) => {
 };
 
 const editarProduto = async (req, res) => {
+  const { id } = req.params;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
+  if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
+		return res
+      .status(400)
+      .json({ mensagem: "Todos os campos são obrigatórios!" });
+	}
+
   try {
+    const verificarId = await knex("produtos").select("id").where("id", id).first();
+
+    const verificarCategoriaId = await knex("categorias").select("id").where("id", categoria_id).first();
+
+    if(!verificarId){
+      return res.json("Id inválido!")
+    }
+
+    if(!verificarCategoriaId){
+      return res.json("Id da categoria inválido!")
+    }
+
+    await knex("produtos").update({ descricao, quantidade_estoque, valor, categoria_id }).where("id", id);
+
+    return res.status(201).json();
   } catch (error) {
     console.error(error.message);
     return res.status(400).json({ mensagem: "Erro interno do servidor." });
