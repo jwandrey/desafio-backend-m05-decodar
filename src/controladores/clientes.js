@@ -1,8 +1,9 @@
 const knex = require('../conexao');
 const joi = require("joi"); 
+const { retornarEndereco } = require('../utils/endereco');
 
 const cadastrarCliente = async (req, res) => {
-  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { nome, email, cpf, cep, numero } = req.body;
 
   const dadosObrigatorios = joi.object({
     nome: joi.string().required(),
@@ -17,6 +18,7 @@ const cadastrarCliente = async (req, res) => {
   });
 
   try {
+    const dadosEndereco = await retornarEndereco(cep);
 
     const { error } = dadosObrigatorios.validate(req.body);
     if (error) {
@@ -38,12 +40,12 @@ const cadastrarCliente = async (req, res) => {
       nome,
       email,
       cpf,
-      cep,
-      rua,
+      cep: dadosEndereco.cep,
+      rua: dadosEndereco.logradouro,
       numero,
-      bairro,
-      cidade,
-      estado,
+      bairro: dadosEndereco.bairro,
+      cidade: dadosEndereco.localidade,
+      estado: dadosEndereco.uf
     });
 
     return res
