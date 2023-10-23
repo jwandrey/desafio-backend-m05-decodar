@@ -1,49 +1,143 @@
 const knex = require('../conexao');
-const { verificaIdExistente } = require('../utils/verificacoes');
+const joi = require("joi"); 
 
 const cadastrarCliente = async (req, res) => {
-    const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
-    try {
-        
-     } catch (error) {
-       console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
-     }
+  const dadosObrigatorios = joi.object({
+    nome: joi.string().required(),
+    email: joi.string().email().required(),
+    cpf: joi.string().length(11).required(),
+    cep: joi.string().length(8).allow(null),
+    rua: joi.string().allow(null),
+    numero: joi.string().allow(null),
+    bairro: joi.string().allow(null),
+    cidade: joi.string().allow(null),
+    estado: joi.string().allow(null),
+  });
+
+  try {
+
+    const { error } = dadosObrigatorios.validate(req.body);
+    if (error) {
+      return res.status(400).json({ mensagem: error.details[0].message });
+    }
+
+    const clienteComEmail = await knex("clientes").where({ email }).first();
+    const clienteComCPF = await knex("clientes").where({ cpf }).first();
+
+    if (clienteComEmail) {
+      return res.status(400).json({ mensagem: "E-mail já cadastrado" });
+    }
+
+    if (clienteComCPF) {
+      return res.status(400).json({ mensagem: "CPF já cadastrado" });
+    }
+
+    await knex("clientes").insert({
+      nome,
+      email,
+      cpf,
+      cep,
+      rua,
+      numero,
+      bairro,
+      cidade,
+      estado,
+    });
+
+    return res
+      .status(201)
+      .json({ mensagem: "Cliente cadastrado com sucesso!" });
+
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
 }
 
 const editarCliente = async (req, res) => {
-    const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
+  const { id } = req.params;
+  const { nome, email, cpf, cep, rua, numero, bairro, cidade, estado } = req.body;
 
-    try {
-        
-     } catch (error) {
-       console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
-     }
+  const dadosObrigatorios = joi.object({
+    nome: joi.string().required(),
+    email: joi.string().email().required(),
+    cpf: joi.string().length(11).required(),
+    cep: joi.string().length(8).allow(null),
+    rua: joi.string().allow(null),
+    numero: joi.string().allow(null),
+    bairro: joi.string().allow(null),
+    cidade: joi.string().allow(null),
+    estado: joi.string().allow(null),
+  });
+
+  try {
+    const { error } = dadosObrigatorios.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ mensagem: error.details[0].message });
+    }
+
+    const clienteExistente = await knex("clientes").where({ id }).first();
+
+    if (!clienteExistente) {
+      return res.status(404).json({ mensagem: "Cliente não encontrado" });
+    }
+
+    const clienteComEmail = await knex("clientes").where({ email }).whereNot({ id }).first();
+    const clienteComCPF = await knex("clientes").where({ cpf }).whereNot({ id }).first();
+
+    if (clienteComEmail) {
+      return res.status(400).json({ mensagem: "E-mail já cadastrado" });
+    }
+
+    if (clienteComCPF) {
+      return res.status(400).json({ mensagem: "CPF já cadastrado" });
+    }
+
+    await knex("clientes")
+      .where({ id })
+      .update({ nome, email, cpf, cep, rua, numero, bairro, cidade, estado });
+
+    return res.status(200).json({ mensagem: "Cliente atualizado com sucesso" });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
 }
 
 const listarClientes = async (req, res) => {
-    try {
-        
-     } catch (error) {
-       console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
-     }
-}
+
+  try {
+    const clientesCadastrados = await knex("clientes").select("*");
+
+    return res.json(clientesCadastrados);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
+};
 
 const detalharClientePorId = async (req, res) => {
-    try {
-        
-     } catch (error) {
-       console.error(error.message);
-       return res.status(400).json({ mensagem: "Erro interno do servidor." });
-     }
+  try {
+    const { id } = req.params;
+    const cliente = await knex("clientes").where({ id }).first();
+
+    if (!cliente) {
+      return res.status(404).json({ mensagem: "Cliente não encontrado" });
+    }
+    return res.json(cliente);
+
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
 }
 
 module.exports = {
-    cadastrarCliente,
-    editarCliente,
-    listarClientes,
-    detalharClientePorId
+  cadastrarCliente,
+  editarCliente,
+  listarClientes,
+  detalharClientePorId
 }
