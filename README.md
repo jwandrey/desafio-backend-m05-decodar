@@ -24,6 +24,7 @@ npm install pg,
 npm install knex,
 npm install cors,
 npm install dotenv
+npm install joi
 
 ```
 OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
@@ -82,4 +83,3 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
   </tr>
    
 </table>
-
