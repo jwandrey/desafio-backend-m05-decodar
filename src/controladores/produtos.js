@@ -1,6 +1,5 @@
 const knex = require("../conexao");
 const {
-  verificaIdExistente,
   verificaNumeroValido,
 } = require("../utils/verificacoes");
 

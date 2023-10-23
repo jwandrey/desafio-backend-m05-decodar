@@ -9,16 +9,11 @@ const verificaEmailSenha = (email, senha, res) => {
     }
 }
 
-const verificaIdExistente = (id) => {
-
-}
-
 const verificaNumeroValido = (numero) => {
     return isNaN(numero);
 }
 
 module.exports = {
     verificaEmailSenha,
-    verificaIdExistente,
     verificaNumeroValido
 }
