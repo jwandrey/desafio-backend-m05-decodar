@@ -119,7 +119,7 @@ const listarClientes = async (req, res) => {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const detalharClientePorId = async (req, res) => {
   try {
