@@ -114,7 +114,7 @@ const listarClientes = async (req, res) => {
   try {
     const clientesCadastrados = await knex("clientes").select("*");
 
-    return res.json(clientesCadastrados);
+    return res.status(200).json(clientesCadastrados);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
@@ -129,7 +129,7 @@ const detalharClientePorId = async (req, res) => {
     if (!cliente) {
       return res.status(404).json({ mensagem: "Cliente não encontrado" });
     }
-    return res.json(cliente);
+    return res.status(200).json(cliente);
 
   } catch (error) {
     console.error(error.message);

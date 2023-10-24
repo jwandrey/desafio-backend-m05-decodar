@@ -5,6 +5,7 @@ const { verificaNumeroValido } = require("../utils/verificacoes");
 const listarCategorias = async (req, res) => {
   try {
     const categoriasListadas = await knex("categorias").select("descricao");
+
     return res.json(categoriasListadas);
   } catch (error) {
     console.error(error.message);
@@ -76,7 +77,7 @@ const editarProduto = async (req, res) => {
 
     await knex("produtos").update({ descricao, quantidade_estoque, valor, categoria_id }).where("id", id);
 
-    return res.status(201).json();
+    return res.status(200).json();
   } catch (error) {
     console.error(error.message);
     return res.status(400).json({ mensagem: "Erro interno do servidor." });
@@ -120,7 +121,7 @@ const listarProdutos = async (req, res) => {
       }
     }
 
-    return res.json(produtosListados);
+    return res.status(200).json(produtosListados);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
