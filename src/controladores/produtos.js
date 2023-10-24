@@ -14,7 +14,7 @@ const listarCategorias = async (req, res) => {
 
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
-  
+
   try {
     const schemaProduto = joi.object({
       descricao: joi.string().required(),
@@ -46,6 +46,7 @@ const cadastrarProduto = async (req, res) => {
       .status(201)
       .json({ mensagem: "Produto cadastrado com sucesso!" });
   } catch (error) {
+    console.error(error.message)
     return res.status(400).json({ mensagem: error.message });
   }
 };
