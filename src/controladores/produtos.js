@@ -1,8 +1,6 @@
 const knex = require("../conexao");
-const {
-  verificaIdExistente,
-  verificaNumeroValido,
-} = require("../utils/verificacoes");
+const joi = require("joi"); 
+const { verificaNumeroValido } = require("../utils/verificacoes");
 
 const listarCategorias = async (req, res) => {
   try {
@@ -17,23 +15,16 @@ const listarCategorias = async (req, res) => {
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
-  if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
-    return res
-      .status(400)
-      .json({ mensagem: "Todos os campos são obrigatórios!" });
-  }
-
-  if (
-    verificaNumeroValido(quantidade_estoque) ||
-    verificaNumeroValido(valor) ||
-    verificaNumeroValido(categoria_id)
-  ) {
-    return res
-      .status(400)
-      .json({ mensagem: "O campo informado deve ser um número válido." });
-  }
-
   try {
+    const schemaProduto = joi.object({
+      descricao: joi.string().required(),
+      quantidade_estoque: joi.number().integer().required(),
+      valor: joi.number().integer().required(),
+      categoria_id: joi.number().integer().required()
+    });
+
+    await schemaProduto.validateAsync(req.body);
+
     const categoriaExistente = await knex("categorias")
       .where("id", categoria_id)
       .first();
@@ -55,8 +46,8 @@ const cadastrarProduto = async (req, res) => {
       .status(201)
       .json({ mensagem: "Produto cadastrado com sucesso!" });
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+    console.error(error.message)
+    return res.status(400).json({ mensagem: error.message });
   }
 };
 

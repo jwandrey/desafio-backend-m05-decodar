@@ -24,7 +24,8 @@ npm install pg,
 npm install knex,
 npm install cors,
 npm install dotenv
-
+npm install joi
+npm install axios
 ```
 OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
 
