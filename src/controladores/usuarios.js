@@ -37,17 +37,23 @@ const editarUsuario = async (req, res) => {
   try {
     const senhaCriptografada = await criptografarSenha(senha)
 
-    let verificarEmail = await knex("usuarios").select("email").where("id", id).first();
-    if(email == verificarEmail.email){
+    let verificarEmailUsuario = await knex("usuarios").select("email").where("id", id).first();
+    let verificarEmails = await knex("usuarios").select("email").where("email", email).first();
+
+    if(email == verificarEmailUsuario.email){
       await knex("usuarios").update({nome, senha: senhaCriptografada}).where("id", id);
-      res.status(201).json();
+      return res.status(201).json();
     }
 
-    
+    if(verificarEmails){
+      return res.status(400).json({ mensagem: "O email informado está vinculado a outra conta." });
+    }
+
     await knex("usuarios").update({ nome, email, senha: senhaCriptografada }).where("id", id);
-    res.status(201).json();
+    return res.status(201).json();
+    
   } catch (error) {
-    return res.status(400).json({ mensagem: "O email informado está vinculado a outra conta." });
+     return res.status(400).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
