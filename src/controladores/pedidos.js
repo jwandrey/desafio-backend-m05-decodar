@@ -1,30 +1,32 @@
 const knex = require('../conexao');
 const joi = require("joi"); 
 const { verificaNumeroValido } = require("../utils/verificacoes");
+const transportador = require("../servicos/nodemailer");
+const compiladorHtml = require("../utils/compiladorHtml");
 
 const cadastrarPedido = async (req, res) => {
     const { cliente_id, observacao, pedido_produtos } = req.body;
 
     if (pedido_produtos.length < 1) {
         return res
-        .status(400)
-        .json({ mensagem: "Deve-se incluir pelo menos um produto no pedido." })
+            .status(400)
+            .json({ mensagem: "Deve-se incluir pelo menos um produto no pedido." })
     }
 
     if (verificaNumeroValido(cliente_id)) {
         return res
-          .status(400)
-          .json({ mensagem: "O id do cliente deve ser um número válido." });
+            .status(400)
+            .json({ mensagem: "O id do cliente deve ser um número válido." });
       }
 
     const clienteExistente = await knex("clientes")
-    .where("id", cliente_id)
-    .first();
+        .where("id", cliente_id)
+        .first();
 
     if (!clienteExistente) {
-      return res
-      .status(404)
-      .json({ mensagem: "Cliente não encontrado" });
+        return res
+            .status(404)
+            .json({ mensagem: "Cliente não encontrado" });
     }
   
     try {
@@ -45,26 +47,26 @@ const cadastrarPedido = async (req, res) => {
 
         for (const pedido of pedido_produtos) {
             const produtoExistente = await knex("produtos")
-            .where("id", pedido.produto_id)
-            .first();
+                .where("id", pedido.produto_id)
+                .first();
 
             if (!produtoExistente) {
                 return res
-                .status(400)
-                .json({ mensagem: "Não existe produto cadastrado com o id informado." });
+                    .status(400)
+                    .json({ mensagem: "Não existe produto cadastrado com o id informado." });
             }
 
             if (produtoExistente.quantidade_estoque < pedido.quantidade_produto) {
                 return res
-                .status(400)
-                .json({ mensagem: "Estoque insuficiente. Pedido não efetuado." });
+                    .status(400)
+                    .json({ mensagem: "Estoque insuficiente. Pedido não efetuado." });
             }
 
             let estoqueAposVenda = produtoExistente.quantidade_estoque - pedido.quantidade_produto;
 
             await knex("produtos")
-            .where("id", pedido.produto_id)
-            .update({ quantidade_estoque: estoqueAposVenda });
+                .where("id", pedido.produto_id)
+                .update({ quantidade_estoque: estoqueAposVenda });
 
             const valorPedidoProduto = pedido.quantidade_produto * produtoExistente.valor;
             valorTotalDoPedido += valorPedidoProduto;
@@ -78,13 +80,13 @@ const cadastrarPedido = async (req, res) => {
 
         for (const pedido of pedido_produtos) {
             const produtoExistente = await knex("produtos")
-            .where("id", pedido.produto_id)
-            .first();
+                .where("id", pedido.produto_id)
+                .first();
 
             if (!produtoExistente) {
                 return res
-                .status(400)
-                .json({ mensagem: "Não existe produto cadastrado com o id informado." });
+                    .status(400)
+                    .json({ mensagem: "Não existe produto cadastrado com o id informado." });
             }
 
             const pedidoId = await knex("pedidos")
@@ -100,11 +102,25 @@ const cadastrarPedido = async (req, res) => {
             })
         }
 
-        //aqui o envio de email (após todas as validações)
+        const cliente = await knex("clientes")
+            .select("nome", "email", )
+            .where("id", cliente_id)
+            .first();
+
+        const html = await compiladorHtml("./src/templates/login.html", {
+            nomeusuario: cliente.nome,
+          });
+
+        transportador.sendMail({
+            from: `${process.env.MAIL_NAME} <${process.env.MAIL_FROM}>`,
+            to: `${cliente.nome} <${cliente.email}>`,
+            subject: "Pedido efetuado com sucesso!",
+            html
+        });
   
-      return res
-        .status(201)
-        .json({ mensagem: "Pedido cadastrado com sucesso!" });
+        return res
+            .status(201)
+            .json({ mensagem: "Pedido cadastrado com sucesso!" });
     } catch (error) {
       console.error(error.message)
       return res.status(400).json({ mensagem: error.message });
