@@ -49,7 +49,7 @@ const cadastrarProduto = async (req, res) => {
     console.error(error.message)
     return res.status(400).json({ mensagem: error.message });
   }
-};
+}
 
 const editarProduto = async (req, res) => {
   const { id } = req.params;
@@ -125,7 +125,7 @@ const listarProdutos = async (req, res) => {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const detalharProdutoPorId = async (req, res) => {
   const { id } = req.params;
