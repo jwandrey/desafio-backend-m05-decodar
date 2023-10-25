@@ -1,6 +1,8 @@
 const knex = require("../conexao");
 const joi = require("joi"); 
 const { verificaNumeroValido, verficarSeExistePedidoComProduto } = require("../utils/verificacoes");
+const { uploadFile } = require("../servicos/storage");
+
 
 const listarCategorias = async (req, res) => {
   try {
@@ -13,19 +15,48 @@ const listarCategorias = async (req, res) => {
   }
 };
 
+const uploadImagemProduto = async (req, res) => {
+  const { file } = req
+  const { id } = req.params;
+
+
+  try{
+    const arquivo = await uploadFile(
+      `imagens/${file.originalname}`,
+      file.buffer,
+      file.mimetype
+      )
+
+      await knex("produtos").update({ produto_imagem: arquivo.url }).where("id", id);
+
+    return res.status(201).json(arquivo.url);
+  }catch(error){
+    console.log(error)
+    return res.status(500).json({mensagem: 'Erro interno do servidor'})
+  }
+}
+
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
+  if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
+    console.log(descricao)
+    return res
+      .status(400)
+      .json({ mensagem: "Todos os campos são obrigatórios!" });
+  }
+
+  if (
+    verificaNumeroValido(quantidade_estoque) ||
+    verificaNumeroValido(valor) ||
+    verificaNumeroValido(categoria_id)
+  ) {
+    return res
+      .status(400)
+      .json({ mensagem: "O campo informado deve ser um número válido." });
+  }
+
   try {
-    const schemaProduto = joi.object({
-      descricao: joi.string().required(),
-      quantidade_estoque: joi.number().integer().required(),
-      valor: joi.number().integer().required(),
-      categoria_id: joi.number().integer().required()
-    });
-
-    await schemaProduto.validateAsync(req.body);
-
     const categoriaExistente = await knex("categorias")
       .where("id", categoria_id)
       .first();
@@ -172,4 +203,5 @@ module.exports = {
   listarProdutos,
   detalharProdutoPorId,
   excluirProduto,
+  uploadImagemProduto
 };
