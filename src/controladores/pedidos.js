@@ -128,60 +128,51 @@ const cadastrarPedido = async (req, res) => {
 }
 
 const listarPedidos = async (req, res) => {
+    const { cliente_id } = req.query;
+
     try {
-        const { cliente_id } = req.query; 
-
-        const consultaPedidos = knex('pedidos') 
-            .select(
-                'pedidos.id',
-                'pedidos.observacao',
-                'pedidos.valor_total',
-                'pedidos.cliente_id',
-                'pedido_produtos.id',
-                'pedido_produtos.quantidade_produto',
-                'pedido_produtos.valor_produto',
-                'pedido_produtos.pedido_id',
-                'pedido_produtos.produto_id'
-            )
-            .leftJoin('pedido_produtos', 'pedidos.id', 'pedido_produtos.pedido_id') // Realiza um JOIN entre 'pedidos' e 'pedido_produtos'.
-
-            .where(builder => {
-                if (cliente_id) {
-                    builder.where('pedidos.cliente_id', cliente_id); // Filtra por 'cliente_id' se fornecido.
-                }
-            });
-
-        const resultadoConsulta = await consultaPedidos; // Executa a consulta e aguarda o resultado.
-
-        const pedidosAgrupados = {}; // Inicializa um objeto para agrupar os resultados.
-
-        resultadoConsulta.forEach(row => { // Percorre os resultados da consulta.
-            if (!pedidosAgrupados[row.pedido_id]) {
-                pedidosAgrupados[row.pedido_id] = {
-                    pedido: {
-                        id: row.pedido_id,
-                        valor_total: row.valor_total,
-                        observacao: row.observacao,
-                        cliente_id: row.cliente_id,
-                    },
-                    pedido_produtos: [],
-                };
+        if (cliente_id) {
+            const clienteExistente = await knex("clientes")
+                .where("id", cliente_id)
+                .first();
+            
+            if (!clienteExistente) {
+                return res
+                    .status(400)
+                    .json({ mensagem: "Cliente não encontrado." })
             }
 
-            if (row.pedido_produto_id) { // Verifica se a linha contém informações de produto.
-                pedidosAgrupados[row.pedido_id].pedido_produtos.push({
-                    id: row.pedido_produto_id,
-                    quantidade_produto: row.quantidade_produto,
-                    valor_produto: row.valor_produto,
-                    pedido_id: row.pedido_id,
-                    produto_id: row.produto_id
-                });
+            const pedidosCliente = await knex("pedidos")
+                .where("cliente_id", clienteExistente.id);
+
+            const pedidosPedidosProdutos = [];
+
+            for (const pedido of pedidosCliente) {
+                const pedido_produtos = await knex("pedido_produtos")
+                    .where("pedido_id", pedido.id)
+
+                pedidosPedidosProdutos.push({ pedido, pedido_produtos });
             }
-        });
 
-        const response = Object.values(pedidosAgrupados); // Transforma o objeto em uma matriz de pedidos agrupados.
+            return res
+            .status(201)
+            .json(pedidosPedidosProdutos);
+        }
 
-        res.status(200).json(response); 
+        const pedidos = await knex("pedidos");
+
+        const pedidosPedidosProdutos = [];
+
+        for (const pedido of pedidos) {
+            const pedido_produtos = await knex("pedido_produtos")
+            .where("pedido_id", pedido.id)
+
+        pedidosPedidosProdutos.push({ pedido, pedido_produtos });
+        }
+        
+        return res
+        .status(201)
+        .json(pedidosPedidosProdutos);
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ mensagem: "Erro interno do servidor." });
