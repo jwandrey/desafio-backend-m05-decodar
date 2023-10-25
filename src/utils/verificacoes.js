@@ -13,7 +13,12 @@ const verificaNumeroValido = (numero) => {
     return isNaN(numero);
 }
 
+const verficarSeExistePedidoComProduto = async (produto) => {
+    return await knex('pedido_produtos').where('produto_id', produto).first();
+}
+
 module.exports = {
     verificaEmailSenha,
-    verificaNumeroValido
+    verificaNumeroValido,
+    verficarSeExistePedidoComProduto
 }

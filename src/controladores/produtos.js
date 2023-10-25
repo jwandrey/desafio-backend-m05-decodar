@@ -1,6 +1,6 @@
 const knex = require("../conexao");
 const joi = require("joi"); 
-const { verificaNumeroValido } = require("../utils/verificacoes");
+const { verificaNumeroValido, verficarSeExistePedidoComProduto } = require("../utils/verificacoes");
 
 const listarCategorias = async (req, res) => {
   try {
@@ -147,6 +147,9 @@ const detalharProdutoPorId = async (req, res) => {
 const excluirProduto = async (req, res) => {
   const { id } = req.params;
   try {
+    if(await verficarSeExistePedidoComProduto(id)){
+      return res.status(400).json({mensagem: "Existe um pedido que contém esse produto, ele não pode ser excluído."})
+    }
     const produto = await knex("produtos").where("id", id).first();
 
     if (!produto) {
