@@ -1,11 +1,13 @@
 const knex = require("../conexao");
-const {
-  verificaNumeroValido,
-} = require("../utils/verificacoes");
+const joi = require("joi");
+const { verificaNumeroValido, verficarSeExistePedidoComProduto } = require("../utils/verificacoes");
+const { uploadFile, deleteFile } = require("../servicos/storage");
+
 
 const listarCategorias = async (req, res) => {
   try {
     const categoriasListadas = await knex("categorias").select("descricao");
+
     return res.json(categoriasListadas);
   } catch (error) {
     console.error(error.message);
@@ -13,10 +15,32 @@ const listarCategorias = async (req, res) => {
   }
 };
 
+const uploadImagemProduto = async (req, res) => {
+  const { file } = req
+  const { id } = req.params;
+
+
+  try {
+    const arquivo = await uploadFile(
+      `imagens/${file.originalname}`,
+      file.buffer,
+      file.mimetype
+    )
+
+    await knex("produtos").update({ produto_imagem: arquivo.url }).where("id", id);
+
+    return res.status(201).json(arquivo.url);
+  } catch (error) {
+    console.log(error)
+    return res.status(500).json({ mensagem: 'Erro interno do servidor' })
+  }
+}
+
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
+    console.log(descricao)
     return res
       .status(400)
       .json({ mensagem: "Todos os campos são obrigatórios!" });
@@ -54,40 +78,40 @@ const cadastrarProduto = async (req, res) => {
       .status(201)
       .json({ mensagem: "Produto cadastrado com sucesso!" });
   } catch (error) {
-    console.error(error.message);
-    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+    console.error(error.message)
+    return res.status(500).json({ mensagem: error.message });
   }
-};
+}
 
 const editarProduto = async (req, res) => {
   const { id } = req.params;
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
   if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
-		return res
+    return res
       .status(400)
       .json({ mensagem: "Todos os campos são obrigatórios!" });
-	}
+  }
 
   try {
     const verificarId = await knex("produtos").select("id").where("id", id).first();
 
     const verificarCategoriaId = await knex("categorias").select("id").where("id", categoria_id).first();
 
-    if(!verificarId){
+    if (!verificarId) {
       return res.json("Id inválido!")
     }
 
-    if(!verificarCategoriaId){
+    if (!verificarCategoriaId) {
       return res.json("Id da categoria inválido!")
     }
 
     await knex("produtos").update({ descricao, quantidade_estoque, valor, categoria_id }).where("id", id);
 
-    return res.status(201).json();
+    return res.status(200).json();
   } catch (error) {
     console.error(error.message);
-    return res.status(400).json({ mensagem: "Erro interno do servidor." });
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
@@ -128,15 +152,22 @@ const listarProdutos = async (req, res) => {
       }
     }
 
-    return res.json(produtosListados);
+    return res.status(200).json(produtosListados);
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
-};
+}
 
 const detalharProdutoPorId = async (req, res) => {
   const { id } = req.params;
+
+  if (verificaNumeroValido(id)) {
+    return res
+      .status(400)
+      .json({ mensagem: "O id do produto deve ser um número válido." });
+  }
+
   try {
     const produto = await knex("produtos").where("id", id).first().returning("*");
 
@@ -147,13 +178,16 @@ const detalharProdutoPorId = async (req, res) => {
     return res.status(200).json(produto);
   } catch (error) {
     console.error(error.message);
-    return res.status(400).json({ mensagem: "Erro interno do servidor." });
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
 const excluirProduto = async (req, res) => {
   const { id } = req.params;
   try {
+    if (await verficarSeExistePedidoComProduto(id)) {
+      return res.status(400).json({ mensagem: "Existe um pedido que contém esse produto, ele não pode ser excluído." })
+    }
     const produto = await knex("produtos").where("id", id).first();
 
     if (!produto) {
@@ -161,11 +195,12 @@ const excluirProduto = async (req, res) => {
     }
 
     await knex('produtos').where('id', id).del();
+    await deleteFile(produto.produto_imagem)
 
-    return res.status(200).json({mensagem: 'Produto excluído com sucesso!'});
+    return res.status(200).json({ mensagem: 'Produto excluído com sucesso!' });
   } catch (error) {
     console.error(error.message);
-    return res.status(400).json({ mensagem: "Erro interno do servidor." });
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
@@ -176,4 +211,5 @@ module.exports = {
   listarProdutos,
   detalharProdutoPorId,
   excluirProduto,
+  uploadImagemProduto
 };
