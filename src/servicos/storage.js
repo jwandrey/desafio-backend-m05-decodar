@@ -26,6 +26,17 @@ const uploadFile = async (path, buffer, mimetype) => {
     }
 }
 
+const deleteFile = async (path) => {
+    await s3.deleteObject({
+        Bucket: process.env.BACKBLAZE_BUCKET,
+        Key: path,
+    }).promise()
+
+
+    return true
+}
+
 module.exports = {
-    uploadFile
+    uploadFile,
+    deleteFile
 }
