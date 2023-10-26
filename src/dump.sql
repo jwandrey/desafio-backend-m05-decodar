@@ -56,3 +56,5 @@ create table pedido_produtos (
   pedido_id integer not null references pedidos(id),
   produto_id integer not null references produtos(id)
 );
+
+alter table produtos add column produto_imagem text;
