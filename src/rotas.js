@@ -23,7 +23,7 @@ rotas.put('/produto/:id', editarProduto);
 rotas.get('/produto', listarProdutos);
 rotas.get('/produto/:id', detalharProdutoPorId);
 rotas.delete('/produto/:id', excluirProduto);
-rotas.post('/upload/:id', multer.single('arquivo'), uploadImagemProduto)
+// rotas.post('/upload/:id', multer.single('arquivo'), uploadImagemProduto)
 
 rotas.post('/cliente', cadastrarCliente);
 rotas.put('/cliente/:id', editarCliente);
