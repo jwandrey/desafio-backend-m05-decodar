@@ -161,6 +161,13 @@ const listarProdutos = async (req, res) => {
 
 const detalharProdutoPorId = async (req, res) => {
   const { id } = req.params;
+
+  if (verificaNumeroValido(id)) {
+    return res
+      .status(400)
+      .json({ mensagem: "O id do produto deve ser um número válido." });
+  }
+
   try {
     const produto = await knex("produtos").where("id", id).first().returning("*");
 
