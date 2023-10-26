@@ -1,6 +1,7 @@
 const knex = require('../conexao');
 const joi = require("joi"); 
 const { retornarEndereco } = require('../utils/endereco');
+const { verificaNumeroValido } = require('../utils/verificacoes');
 
 const cadastrarCliente = async (req, res) => {
   const { nome, email, cpf, cep, numero } = req.body;
@@ -110,9 +111,8 @@ const editarCliente = async (req, res) => {
 }
 
 const listarClientes = async (req, res) => {
-
   try {
-    const clientesCadastrados = await knex("clientes").select("*");
+    const clientesCadastrados = await knex("clientes").select("*").orderBy("id", "asc");
 
     return res.status(200).json(clientesCadastrados);
   } catch (error) {
@@ -122,8 +122,15 @@ const listarClientes = async (req, res) => {
 }
 
 const detalharClientePorId = async (req, res) => {
+  const { id } = req.params;
+
+  if (verificaNumeroValido(id)) {
+    return res
+      .status(400)
+      .json({ mensagem: "O id do cliente deve ser um número válido." });
+  }
+
   try {
-    const { id } = req.params;
     const cliente = await knex("clientes").where({ id }).first();
 
     if (!cliente) {
