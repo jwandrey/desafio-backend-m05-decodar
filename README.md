@@ -23,9 +23,12 @@ npm install jsonwebtoken,
 npm install pg,
 npm install knex,
 npm install cors,
-npm install dotenv
-npm install joi
-npm install axios
+npm install dotenv,
+npm install joi,
+npm install axios,
+npm install multer,
+npm install aws-sdk
+
 ```
 OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
 
