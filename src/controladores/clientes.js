@@ -76,6 +76,8 @@ const editarCliente = async (req, res) => {
   });
 
   try {
+    const dadosEndereco = await retornarEndereco(cep);
+
     const { error } = dadosObrigatorios.validate(req.body);
 
     if (error) {
@@ -101,7 +103,16 @@ const editarCliente = async (req, res) => {
 
     await knex("clientes")
       .where({ id })
-      .update({ nome, email, cpf, cep, rua, numero, bairro, cidade, estado });
+      .update({ 
+        nome, 
+        email, 
+        cpf, 
+        cep: dadosEndereco.cep, 
+        rua: dadosEndereco.logradouro, 
+        numero, 
+        bairro: dadosEndereco.bairro, 
+        cidade: dadosEndereco.localidade, 
+        estado: dadosEndereco.uf });
 
     return res.status(200).json({ mensagem: "Cliente atualizado com sucesso" });
   } catch (error) {
