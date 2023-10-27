@@ -1,7 +1,7 @@
 const knex = require("../conexao");
 const joi = require("joi");
 const { verificaNumeroValido, verficarSeExistePedidoComProduto } = require("../utils/verificacoes");
-const { uploadFile, deleteFile } = require("../servicos/storage");
+const { uploadFile } = require("../servicos/storage");
 
 
 const listarCategorias = async (req, res) => {
