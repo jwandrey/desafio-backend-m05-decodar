@@ -1,4 +1,5 @@
 const knex = require('../conexao');
+const joi = require("joi");
 const { criptografarSenha } = require('../utils/criptografia');
 
 const cadastrarUsuario = async (req, res) => {
