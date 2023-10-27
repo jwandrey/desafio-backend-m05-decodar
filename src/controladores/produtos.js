@@ -129,7 +129,7 @@ const listarProdutos = async (req, res) => {
   const { categoria_id } = req.query;
 
   try {
-    let produtosListados = await knex("produtos").select("*").orderBy("id", asc);
+    let produtosListados = await knex("produtos").select("*").orderBy("id", "asc");
 
     if (categoria_id) {
       if (verificaNumeroValido(categoria_id)) {
