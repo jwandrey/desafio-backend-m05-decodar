@@ -11,7 +11,7 @@ Este sistema é responsável por gerenciar dados do usuário para efetuar cadast
 * <b>Alterar os dados do usuário logado</b>: Verifica se o usuário está logado através do token e se estiver, permite alterar os dados. O email deve ser único, retornando uma mensagem de erro, caso não seja.
 * <b>Listar categorias</b>: Lista todas as categorias que podem ser usadas no sistema.
 ## :wrench: Tecnologias utilizadas
-* Node.js, Express, pg, postgresql, nodemon, bcrypt, jsonwebtoken, knex, cors e dotenv.
+* Node.js, Express, pg, postgresql, nodemon, bcrypt, jsonwebtoken, knex, cors, dotenv, joi, axios, multer, aws-sdk, handlebars e fs.
 
 ## :rocket: Rodando o projeto
 Para rodar localmente, clone o repositório, e instale as seguintes bibliotecas:
@@ -27,13 +27,13 @@ npm install dotenv,
 npm install joi,
 npm install axios,
 npm install multer,
-npm install aws-sdk
+npm install aws-sdk,
+npm install handlebars,
+npm install fs
 
 ```
 OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
 
-## :soon: Implementação futura
-* Na segunda sprint haverão mais funcionalidades, em breve incluídas neste repositório.
 
 ## :outbox_tray: Deploy
 * Fizemos o deploy da API com a ferramenta gratuita [Cyclic](https://www.cyclic.sh/), e a criação de banco de dados no [ElephantSQL](https://www.elephantsql.com/).
