@@ -40,44 +40,8 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
 * [Link do Deploy](https://doubtful-cyan-harp-seal.cyclic.app/)
 
 ## :handshake: Colaboradores
-<table>
-  <tr align="center">
-   <td>
-      <a href="http://github.com/Geana-Almeida">
-        <sub>
-          <b>Geana Almeida</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="http://github.com/Darllisouza">
-        <sub>
-          <b>darlliane</b>
-        </sub>
-      </a>
-    </td>
-    </td>
-    <td align="center">
-      <a href="http://github.com/jwandrey">
-        <sub>
-          <b>Jéssica</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-        <a href="http://github.com/lettribeiros">
-          <sub>
-            <b>Leticia</b>
-          </sub>
-        </a>
-      </td>
-    <td align="center">
-        <a href="http://github.com/luelencavalheiro">
-          <sub>
-            <b>Luelen Cavalheiro</b>
-          </sub>
-        </a>
-      </td>
-  </tr>
-   
-</table>
+* [Geana Almeida](http://github.com/Geana-Almeida).
+* [Darlliane Souza](http://github.com/Darllisouza).
+* [Jéssica Wandrey](http://github.com/jwandrey).
+* [Leticia Ribeiro](http://github.com/lettribeiros).
+* [Luelen Cavalheiro](http://github.com/luelencavalheiro).
