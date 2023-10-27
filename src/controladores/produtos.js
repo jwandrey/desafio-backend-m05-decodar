@@ -19,8 +19,15 @@ const uploadImagemProduto = async (req, res) => {
   const { file } = req
   const { id } = req.params;
 
-
   try {
+    const produtoExiste = await knex("produtos")
+    .where({ id })
+    .first();
+  
+    if (!produtoExiste) {
+      return res.status(400).json({ mensagem: "Produto não encontrado." });
+    }
+
     const arquivo = await uploadFile(
       `imagens/${file.originalname}`,
       file.buffer,
