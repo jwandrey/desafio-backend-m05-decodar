@@ -41,7 +41,7 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
   <tr align="center">
    <td>
       <a href="http://github.com/Geana-Almeida">
-        <img src="img/geana.png" width="100px;" alt="Foto da Geana Almeida"/><br>
+        <img src="img/geana.jpeg" width="100px;" border-radius= "50px;" alt="Foto da Geana Almeida"  /><br>
         <sub>
           <b>Geana Almeida</b>
         </sub>
