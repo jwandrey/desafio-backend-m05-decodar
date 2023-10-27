@@ -39,24 +39,19 @@ const uploadImagemProduto = async (req, res) => {
 const cadastrarProduto = async (req, res) => {
   const { descricao, quantidade_estoque, valor, categoria_id } = req.body;
 
-  if (!descricao || !quantidade_estoque || !valor || !categoria_id) {
-    console.log(descricao)
-    return res
-      .status(400)
-      .json({ mensagem: "Todos os campos são obrigatórios!" });
-  }
-
-  if (
-    verificaNumeroValido(quantidade_estoque) ||
-    verificaNumeroValido(valor) ||
-    verificaNumeroValido(categoria_id)
-  ) {
-    return res
-      .status(400)
-      .json({ mensagem: "O campo informado deve ser um número válido." });
-  }
+  const dadosObrigatorios = joi.object({
+    descricao: joi.string().required(),
+    quantidade_estoque: joi.number().integer().required(),
+    valor: joi.number().required(),
+    categoria_id: joi.number().integer().required()
+  });
 
   try {
+    const { error } = dadosObrigatorios.validate(req.body);
+    if (error) {
+      return res.status(400).json({ mensagem: error.details[0].message });
+    }
+
     const categoriaExistente = await knex("categorias")
       .where("id", categoria_id)
       .first();
@@ -65,6 +60,19 @@ const cadastrarProduto = async (req, res) => {
       return res
         .status(400)
         .json({ mensagem: "Não existe categoria com o id informado." });
+    }
+
+    const produtoExiste = await knex("produtos")
+      .where("descricao", descricao)
+      .where("categoria_id", categoria_id)
+      .first();
+
+    if (produtoExiste) {
+
+      await knex("produtos").update({ quantidade_estoque }).where("id", produtoExiste.id);
+      return res
+        .status(200)
+        .json({ mensagem: "Estoque do produto atualizado com sucesso!" });
     }
 
     await knex("produtos").insert({

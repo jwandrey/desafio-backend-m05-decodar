@@ -4,17 +4,16 @@ const { criptografarSenha } = require('../utils/criptografia');
 const cadastrarUsuario = async (req, res) => {
   const { nome, email, senha } = req.body;
 
-  if (!nome || !email || !senha) {
-    return res
-      .status(400)
-      .json({ mensagem: "Todos os campos são obrigatórios!" });
-  }
+  const dadosObrigatorios = joi.object({
+    nome: joi.string().required(),
+    email: joi.string().email().required(),
+    senha: joi.string().required(),
+  });
 
   try {
-     const emailExistente = await knex("usuarios").where("email", email).first();
-
-     if (emailExistente) {
-       return res.status(400).json({ mensagem: "O email já existe." });
+    const { error } = dadosObrigatorios.validate(req.body);
+    if (error) {
+      return res.status(400).json({ mensagem: error.details[0].message });
     }
 
     const senhaCriptografada = await criptografarSenha(senha)
@@ -40,44 +39,44 @@ const editarUsuario = async (req, res) => {
     let verificarEmailUsuario = await knex("usuarios").select("email").where("id", id).first();
     let verificarEmails = await knex("usuarios").select("email").where("email", email).first();
 
-    if(email == verificarEmailUsuario.email){
-      await knex("usuarios").update({nome, senha: senhaCriptografada}).where("id", id);
+    if (email == verificarEmailUsuario.email) {
+      await knex("usuarios").update({ nome, senha: senhaCriptografada }).where("id", id);
       return res.status(201).json();
     }
 
-    if(verificarEmails){
+    if (verificarEmails) {
       return res.status(400).json({ mensagem: "O email informado está vinculado a outra conta." });
     }
 
     await knex("usuarios").update({ nome, email, senha: senhaCriptografada }).where("id", id);
     return res.status(200).json();
-    
+
   } catch (error) {
-     return res.status(400).json({ mensagem: "Erro interno do servidor." });
+    return res.status(400).json({ mensagem: "Erro interno do servidor." });
   }
 };
 
 const detalharUsuario = async (req, res) => {
-	const idToken = req.usuario.id;
+  const idToken = req.usuario.id;
 
-	try {
-		const usuario = await knex("usuarios").where("id", idToken)
+  try {
+    const usuario = await knex("usuarios").where("id", idToken)
 
-		if (!usuario) {
-			return res.status(401).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
-		}
+    if (!usuario) {
+      return res.status(401).json({ mensagem: "Para acessar este recurso um token de autenticação válido deve ser enviado." });
+    }
 
-		const usuarioAutenticado = {
-			id: idToken,
-			nome: req.usuario.nome,
-			email: req.usuario.email
-		}
+    const usuarioAutenticado = {
+      id: idToken,
+      nome: req.usuario.nome,
+      email: req.usuario.email
+    }
 
-		return res.json(usuarioAutenticado);
-	} catch (error) {
-      console.error(error);
-		return res.status(500).json({ mensagem: "Erro interno do servidor." });
-	}
+    return res.json(usuarioAutenticado);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ mensagem: "Erro interno do servidor." });
+  }
 };
 
 
