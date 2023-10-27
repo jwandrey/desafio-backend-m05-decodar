@@ -41,7 +41,6 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
   <tr align="center">
    <td>
       <a href="http://github.com/Geana-Almeida">
-        <img src="img/geana.jpeg" width="100px;" border-radius= "50px;" alt="Foto da Geana Almeida"  /><br>
         <sub>
           <b>Geana Almeida</b>
         </sub>
@@ -49,7 +48,6 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
     </td>
     <td align="center">
       <a href="http://github.com/Darllisouza">
-        <img src="img/darlli.jpeg" width="100px;" alt="Foto da darlliane"/><br>
         <sub>
           <b>darlliane</b>
         </sub>
@@ -58,7 +56,6 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
     </td>
     <td align="center">
       <a href="http://github.com/jwandrey">
-        <img src="img/jess.jpeg" width="100px;" alt="Foto da Jéssica"/><br>
         <sub>
           <b>Jéssica</b>
         </sub>
@@ -66,7 +63,6 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
     </td>
     <td align="center">
         <a href="http://github.com/lettribeiros">
-          <img src="img/leticia (2).png" width="100px;" alt="Foto da Leticia"/><br>
           <sub>
             <b>Leticia</b>
           </sub>
@@ -74,7 +70,6 @@ OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente neces
       </td>
     <td align="center">
         <a href="http://github.com/luelencavalheiro">
-          <img src="img/leticia (2).png" width="100px;" alt="Foto da Luelen"/><br>
           <sub>
             <b>Luelen Cavalheiro</b>
           </sub>
