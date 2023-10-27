@@ -68,8 +68,10 @@ const cadastrarProduto = async (req, res) => {
       .first();
 
     if (produtoExiste) {
+      let estoqueFinal = produtoExiste.quantidade_estoque + quantidade_estoque;
 
-      await knex("produtos").update({ quantidade_estoque }).where("id", produtoExiste.id);
+      await knex("produtos").update("quantidade_estoque", estoqueFinal).where("id", produtoExiste.id);
+
       return res
         .status(200)
         .json({ mensagem: "Estoque do produto atualizado com sucesso!" });
