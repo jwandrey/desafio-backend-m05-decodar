@@ -205,7 +205,6 @@ const excluirProduto = async (req, res) => {
     }
 
     await knex('produtos').where('id', id).del();
-    await deleteFile(produto.produto_imagem)
 
     return res.status(200).json({ mensagem: 'Produto excluído com sucesso!' });
   } catch (error) {
