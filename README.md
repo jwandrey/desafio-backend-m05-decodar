@@ -29,9 +29,6 @@ npm install axios
 ```
 OBS: Lembre-se de configurar um arquivo .env com as variáveis de ambiente necessárias.
 
-## :soon: Implementação futura
-* Na segunda sprint haverão mais funcionalidades, em breve incluídas neste repositório.
-
 ## :outbox_tray: Deploy
 * Fizemos o deploy da API com a ferramenta gratuita [Cyclic](https://www.cyclic.sh/), e a criação de banco de dados no [ElephantSQL](https://www.elephantsql.com/).
 * [Link do Deploy](https://doubtful-cyan-harp-seal.cyclic.app/)
